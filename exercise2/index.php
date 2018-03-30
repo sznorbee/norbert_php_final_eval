@@ -1,18 +1,42 @@
 <?php
 
 require_once 'connect.php';
+$users = [];
+$errors = [];
+
+$order = '';
+if(isset($_GET['order']) && isset($_GET['column']))
+{
+    if($_GET['column'] == 'lastname')
+    {
+        $order = ' ORDER BY lastname';
+    }elseif($_GET['column'] = 'firstname')
+    {
+        $order = ' ORDER BY firstname';
+    }elseif($_GET['column'] == 'birthdate')
+    {
+        $order = ' ORDER BY birthdate';
+    }
+    
+    if($_GET['order'] == 'asc')
+    {
+        $order.= ' ASC';
+    }elseif($_GET['order'] == 'desc')
+    {
+        $order.= ' DESC';
+    }
+    
+    $queryUsers = $db->prepare('SELECT * FROM users'.$order);
+    
+    if($queryUsers->execute())
+    {
+        $users = $queryUsers->fetchAll();
+    }
+}
 
 if(!empty($_POST))
 {
-    $order = '';
-    if(isset($_GET['order']) && isset($_GET['column']))
-    {
-    	if($_GET['colum'] == 'lastname'){$order = ' ORDER BY lastname';}
-    	elseif($_GET['colum'] = 'firstname'){$order = ' ORDER BY firstname';}
-    	elseif($_GET['colum'] == 'birthdate'){$order = ' ORDER BY birthdate';}
-    	if($_GET['ordre'] == 'asc'){$order.= ' ASC';}
-    	elseif($_GET['ordre'] == 'desc'){$order.= ' DESC';}
-    }
+    
     
     
     	foreach($_POST as $key => $value)
@@ -30,7 +54,7 @@ if(!empty($_POST))
     		$errors[] = 'Le nom doit comporter au moins 3 caractères';
     	}
     	
-    	if(!filter_variable($post['email'], FILTER_VALIDATE_EMAIL))
+    	if(!filter_var($post['email'], FILTER_VALIDATE_EMAIL))
     	{
     		$errors[] = 'L\'adresse email est invalide';
     	}
@@ -51,7 +75,7 @@ if(!empty($_POST))
     	// error = 0 = insertion user
         $insertUser = $db->prepare('INSERT INTO users (gender, firstname, lastname, email, birthdate, city) VALUES(:gender, :firstname, :lastname, :email, :birthdate, :city)');
         $insertUser->bindValue(':gender', $post['gender']);
-        $insertUser->bindValue(':firstname', $post['fistname']);
+        $insertUser->bindValue(':firstname', $post['firstname']);
         $insertUser->bindValue(':lastname', $post['lastname']);
         $insertUser->bindValue(':email', $post['email']);
         $insertUser->bindValue(':birthdate', date('Y-m-d', strtotime($post['birthdate'])));
@@ -65,13 +89,9 @@ if(!empty($_POST))
         }
     }
     
-    $queryUsers = $db->prepare('SELECT * FROM users'.$order);
     
-    if($queryUsers->execute())
-    {	
-        $users = $queryUsers-->fetchAll();
-    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -89,8 +109,8 @@ if(!empty($_POST))
         		<a href="index.php?column=firstname&order=desc">Prénom (décroissant)</a> |
         		<a href="index.php?column=lastname&order=asc">Nom (croissant)</a> |
         		<a href="index.php?column=lastname&order=desc">Nom (décroissant)</a> |
-        		<a href="index.php?column=birthdate&order=desc">Âge (croissant)</a> |
-        		<a href="index.php?column=birthdate&order=asc">Âge (décroissant)</a>
+        		<a href="index.php?column=birthdate&order=asc">Âge (croissant)</a> |
+        		<a href="index.php?column=birthdate&order=desc">Âge (décroissant)</a>
         	</p><br>
 			<div class="row">
             <?php
@@ -104,7 +124,8 @@ if(!empty($_POST))
             if(empty($errors))
             {
                 echo '<div class="col-md-6 col-md-offset-3">';
-                echo '<div class="alert alert-danger">'.implode('<br>', $errors).'</div>';
+                $err = implode('', $errors);
+                echo "<div class='alert alert-danger'><br>$err</div>";
                 echo '</div><br>';
             }
             ?>
