@@ -1,33 +1,26 @@
 <?php
 require 'Cat.php';
 
-//cat from constructor
-$catOriginal = new Cat();
-$catArray = $catOriginal->getInfo();
-
-//create cats
-$cat1 = new Cat();
-$cat2 = new Cat();
-$cat3 = new Cat();
-
-//fil them up 
-$cat1->setAge(2)->setColor('white')->setName('tom')->setRace('little')->setSex('male');
-$cat2->setAge(3)->setColor('black')->setName('jerry')->setRace('big')->setSex('female');
-$cat3->setAge(4)->setColor('brown')->setName('sam')->setRace('biggest')->setSex('male');
+$cat1 = new Cat('Tiger', 2, 'yellow', 'male', 'chat');
+$cat2 = new Cat('Gyilkos', 1, 'white', 'female', 'tiger');
+$cat3 = new Cat('Alibaba', 5, 'blue', 'male', 'chat');
 
 //create container for display them
-$cats = [$catOriginal, $cat1, $cat2, $cat3];
+$cats = [$cat1, $cat2, $cat3];
 
-//loop on container and 
-
+//loop on container and
+echo "<section>";
 foreach ($cats as $example)
-{   
-   
+{
+    echo "<article>";
+
     $Array = $example->getInfo();
     foreach ($Array as $key => $values)
     {
         echo $key.': '.$values."<br>";
     }
     echo "<br>";
-   
+    
+    echo "</article>";
 }
+echo "</section>";

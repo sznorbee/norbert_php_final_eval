@@ -7,62 +7,99 @@ class Cat
     private $sex;
     private $race;
     
-    public function __construct()
-    {
-        
-        $this->firstName = 'Tiger';
-        $this->setAge(1);
-        $this->setColor('Yellow');
-        $this->setSex('male');
-        $this->setRace('cat');
+    public function __construct($firstName, $age, $color, $sex, $race)
+    {  
+        $this->setName($firstName)->setAge($age)->setColor($color)->setSex($sex)->setRace($race);
+        return $this;
     }
     
     public function setName(string $name)
     {
-        if (strlen($name) < 3 or strlen($name) > 20 )
+        try 
         {
-            throw new Exception('Name between 3 and 20 characters');
+            if (strlen($name) < 3 or strlen($name) > 20 )
+            {
+                throw new Exception();
+            }
+            $this->firstName = $name;
+            return $this;
+            
+        }catch (Exception $e)
+        {
+            echo 'Name between 3 and 20 characters';
+            die();
         }
-        $this->firstName = $name;
-        return $this;
+        
     }
     
-    public function setAge(int $age)
+    public function setAge($age)
     {
-        $this->age =  $age;
-        return $this;
+        try 
+        {
+            if (!is_int($age))
+            {
+                throw new Exception();
+            }
+            $this->age =  $age;
+            return $this;
+        }catch (Exception $e)
+        {
+            echo 'Please use a number';
+            die();
+        }
     }
     
     public function setColor(string $color)
     {
-        if (strlen($color) < 3 or strlen($color) > 10 )
+        try 
         {
-            throw new Exception('Color between 3 and 10 characters');
+            if (strlen($color) < 3 or strlen($color) > 10 )
+            {
+                throw new Exception();
+            }
+            $this->color =  $color;
+            return $this;
+        }catch (Exception $e)
+        {
+            echo 'Color between 3 and 10 characters';
+            die();
         }
-        $this->color =  $color;
-        return $this;
     }
     
     public function setSex(string $sex)
     {
-        $arraySex = ['male', 'female'];
-        if (!(in_array($sex, $arraySex)))
+        try 
         {
-            throw new Exception('male or female');
-            
+            $arraySex = ['male', 'female'];
+            if (!(in_array($sex, $arraySex)))
+            {
+                throw new Exception();
+                
+            }
+            $this->sex =  $sex;
+            return $this;
+        }catch (Exception $e)
+        {
+            echo 'male or female';
+            die();
         }
-        $this->sex =  $sex;
-        return $this;
     }
     
     public function setRace(string $race)
     {
-        if (strlen($race) < 3 or strlen($race) > 20 )
+        try 
         {
-            throw new Exception('Race between 3 and 20 characters');
+            if (strlen($race) < 3 or strlen($race) > 20 )
+            {
+                throw new Exception();
+            }
+            $this->race =  $race;
+            return $this;
+        }catch (Exception $e)
+        {
+            echo 'Race between 3 and 20 characters';
+            die();
         }
-        $this->race =  $race;
-        return $this;
     }
     
     public function getName()

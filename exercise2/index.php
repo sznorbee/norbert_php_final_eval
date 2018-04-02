@@ -3,8 +3,12 @@
 require_once 'connect.php';
 $users = [];
 $errors = [];
-
 $order = '';
+
+//default display
+//$_GET['column'] = 'lastname';
+//$_GET['order'] = 'asc';
+
 if(isset($_GET['order']) && isset($_GET['column']))
 {
     if($_GET['column'] == 'lastname')
@@ -24,21 +28,20 @@ if(isset($_GET['order']) && isset($_GET['column']))
     }elseif($_GET['order'] == 'desc')
     {
         $order.= ' DESC';
-    }
-    
-    $queryUsers = $db->prepare('SELECT * FROM users'.$order);
-    
-    if($queryUsers->execute())
-    {
-        $users = $queryUsers->fetchAll();
-    }
+    } 
 }
+
+$queryUsers = $db->prepare('SELECT * FROM users'.$order);
+
+if($queryUsers->execute())
+{
+    $users = $queryUsers->fetchAll();
+}
+
 
 if(!empty($_POST))
 {
-    
-    
-    
+
     	foreach($_POST as $key => $value)
     	{
     		$post[$key] = strip_tags(trim($value));

@@ -1,1 +1,1 @@
-SELECT * FROM articles JOIN users ON users.id = articles.id_users WHERE articles.id = 10;
+SELECT * FROM articles JOIN users ON users.id = articles.id_user WHERE articles.id = 10;
